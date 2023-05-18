@@ -1,8 +1,24 @@
-import { Express, Request, Response } from "express";
-import swaggerUi from "swagger-ui-express";
-
-export default function initSwagger(app: Express) {
-  app.use("/docs", swaggerUi.serve, async (_req: Request, res: Response) => {
-    return res.send(swaggerUi.generateHTML(await import("../swagger.json")));
-  });
-}
+import { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+export const initSwagger = (app: INestApplication) => {
+  const config = new ConfigService();
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Destiny API Document')
+    .setDescription('Description')
+    .addServer(config.get('SWAGGER_API_SERVER'))
+    .addBearerAuth(
+      {
+        description: `[just text field] Please enter token in following format: Bearer <JWT>`,
+        name: 'Authorization',
+        bearerFormat: 'Bearer',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header'
+      },
+      'access_token'
+    )
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
+};
