@@ -1,10 +1,13 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { initSwagger } from './config/swagger';
+import configuration from './config/configuration';
 
 async function bootstrap() {
-  const port = process.env.PORT;
+  const port = configuration().port;
   const app = await NestFactory.create(AppModule);
+
   initSwagger(app);
 
   await app.listen(port, () => {
