@@ -3,10 +3,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { initSwagger } from './config/swagger';
 import configuration from './config/configuration';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const port = configuration().port;
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   initSwagger(app);
 
