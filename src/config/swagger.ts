@@ -6,6 +6,8 @@ export const initSwagger = (app: INestApplication) => {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Destiny API Document')
     .setDescription('Description')
+    .setVersion('1.0')
+    .addTag('destiny')
     .addServer(config.get('SWAGGER_API_SERVER'))
     .addBearerAuth(
       {
@@ -20,5 +22,9 @@ export const initSwagger = (app: INestApplication) => {
     )
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      port: process.env.PORT
+    }
+  });
 };
