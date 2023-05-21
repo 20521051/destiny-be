@@ -3,4 +3,4 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable({})
-export class UserService { }
+export class UserService {}
